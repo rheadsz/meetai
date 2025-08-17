@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "test": "node --test test/package-json.test.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
