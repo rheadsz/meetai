@@ -22,15 +22,20 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const formSchema = z.object({
+    //zod checks that email must be a string and look like a real email (heave @ domain)
     email: z.string().email(),
+    //password must be a string and can't be empty
     password: z.string().min(1, {message: "Password is required"}),
 });
 
 
 export const SignInView = () => {
     
+    //router for navigation
     const router = useRouter();
+    //creates pending state to track form submission status
     const [pending, setPending] = useState(false);
+    //creates error state to store error messages
     const [error, setError] = useState<string | null>(null);
 
 
@@ -43,6 +48,7 @@ export const SignInView = () => {
     })
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        //removes old error messages
         setError(null);
         authClient.signIn.email(
             {
