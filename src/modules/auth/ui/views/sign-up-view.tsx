@@ -6,7 +6,7 @@ import { OctagonAlert } from "lucide-react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-
+import {FaGoogle, FaGithub} from "react-icons/fa";
 import {Button} from "@/components/ui/button";
 import {
     Form,
@@ -57,16 +57,44 @@ export const SignUpView = () => {
                 name: data.name,
                 email: data.email,
                 password: data.password,
+                callbackURL: "/",
             },
             {
                 onSuccess: () => {
 
                     setPending(false);
                     router.push("/");
+                   
                     // App Router's push method is compatible with this usage
                 },
 
                 onError: ({error}) => {
+                    setError(error.message);
+                }
+            }
+        );
+
+
+    };
+
+    const onSocial = (provider: "github" | "google") => {
+        setError(null);
+        setPending(true);
+        authClient.signIn.social(
+            {
+                provider: provider,
+                callbackURL: "/",
+            },
+            {
+                onSuccess: () => {
+
+                    setPending(false);
+                   
+                    // App Router's push method is compatible with this usage
+                },
+
+                onError: ({error}) => {
+                    setPending(false);
                     setError(error.message);
                 }
             }
@@ -165,7 +193,7 @@ export const SignUpView = () => {
                         </Alert>
                     )}
 
-                    <Button disabled={pending} type="submit" className="w-full">Sign In</Button>
+                    <Button disabled={pending} type="submit" className="w-full">Sign Up</Button>
                     <div className="after:border-border relative text-center text-sm after:absolute 
                     after:insert-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                         <span className="bg-card text-muted-foreground relative z-10 px-2">Or continue with</span>
@@ -173,8 +201,8 @@ export const SignUpView = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <Button variant="outline" type="button" className="w-full">Google</Button>
-                        <Button variant="outline" type="button" className="w-full">Github</Button>
+                    <Button disabled={pending} onClick={() => onSocial("google") } variant="outline" type="button" className="w-full"><FaGoogle className="mr-2 h-4 w-4" />Google</Button>
+                        <Button disabled={pending} onClick={() => onSocial("github") } variant="outline" type="button" className="w-full"><FaGithub className="mr-2 h-4 w-4" />Github</Button>
 
                     </div>
                     <div className="text-center text-sm">
